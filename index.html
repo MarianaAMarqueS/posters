@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>AR Marker Detection</title>
+
+    <!-- Bibliotecas locais -->
+    <script src="libs/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <!-- <script src="libs/aframe-ar.js"></script>  Mudado para aframe-ar.js em vez de aframe-ar-nft.js -->
+    <script src="libs/aframe-extras.loaders.min.js"></script>
+
+    <style>
+        body { margin: 0; overflow: hidden; }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            z-index: 100;
+            font-family: Arial;
+        }
+    </style>
+</head>
+<body>
+<div id="info">Aponte para o marcador</div>
+
+<a-scene
+        vr-mode-ui="enabled: false"
+        renderer="logarithmicDepthBuffer: true; antialias: true;"
+        embedded
+        arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;"
+        raycaster="objects: [data-raycastable]">
+
+    <!-- Modelo 3D -->
+    <a-assets>
+        <a-asset-item id="model" src="ExtincaoAnimais.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- Marcador de padrão (.patt) -->
+    <a-marker
+            type="pattern"
+            url="libs/assets/patt.hiro"
+       emitevents="true"
+    raycaster="objects: [data-raycastable]"
+    cursor="rayOrigin: mouse">
+
+    <a-entity
+            id="model3d"
+            gltf-model="#model"
+            scale="1 1 1"
+            position="0 1 0"
+            rotation="-90 -90 90"
+            visible="false"
+            animation-mixer>
+    </a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+</a-scene>
+
+<script>
+    // Debug e feedback
+    const info = document.getElementById('info');
+    const marker = document.querySelector('a-marker');
+    const model = document.getElementById('model3d');
+
+    marker.addEventListener('markerFound', () => {
+        info.textContent = "Marcador detectado!";
+        model.setAttribute('visible', 'true');
+        console.log("Marcador encontrado!");
+    });
+
+    marker.addEventListener('markerLost', () => {
+        info.textContent = "Aponte para o marcador";
+        model.setAttribute('visible', 'false');
+        console.log("Marcador perdido!");
+    });
+
+    model.addEventListener('model-loaded', () => {
+        console.log("Modelo 3D carregado com sucesso!");
+    });
+
+    model.addEventListener('error', (evt) => {
+        info.textContent = "Erro ao carregar modelo 3D";
+        console.error("Erro no modelo:", evt.detail);
+    });
+</script>
+</body>
+</html>w
