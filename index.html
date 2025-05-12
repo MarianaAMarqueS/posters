@@ -29,38 +29,25 @@
 <div id="info">Aponte para o marcador</div>
 
 <a-scene
+        embedded
         vr-mode-ui="enabled: false"
         renderer="logarithmicDepthBuffer: true; antialias: true;"
-        embedded
-        arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;"
-        raycaster="objects: [data-raycastable]">
+        arjs="sourceType: webcam; facingMode: environment; debugUIEnabled: false; detectionMode: mono; matrixCodeType: 3x3">
 
-    <!-- Modelo 3D -->
+    <!-- Carregar o modelo 3D -->
     <a-assets>
-        <a-asset-item id="model" src="ExtincaoAnimais.glb"></a-asset-item>
+        <a-asset-item id="model" src="posteranimado.glb"></a-asset-item>
     </a-assets>
 
-    <!-- Marcador de padrão (.patt) -->
-    <a-marker
-            type="pattern"
-            url="libs/assets/patt.hiro"
-       emitevents="true"
-    raycaster="objects: [data-raycastable]"
-    cursor="rayOrigin: mouse">
-
-    <a-entity
-            id="model3d"
-            gltf-model="#model"
-            scale="1 1 1"
-            position="0 1 0"
-            rotation="-90 -90 90"
-            visible="false"
-            animation-mixer>
-    </a-entity>
+    <!-- Marcador AR -->
+    <a-marker type="pattern" url="libs/assets/patt.hiro" emitevents="true">
+        <a-entity id="model3d" gltf-model="#model" scale="1 1 1" position="0 1 0" rotation="-90 -90 90" visible="false" animation-mixer></a-entity>
     </a-marker>
 
+    <!-- Câmera -->
     <a-entity camera></a-entity>
 </a-scene>
+
 
 <script>
     // Debug e feedback
@@ -90,4 +77,4 @@
     });
 </script>
 </body>
-</html>w
+</html>
